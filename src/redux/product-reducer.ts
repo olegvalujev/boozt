@@ -3,18 +3,24 @@ import {productAPI} from "../api/api";
 
 const productReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
-        case 'SN/PRODUCT/LOAD_PRODUCTS':
+        case 'SN/PRODUCT/REQUEST_PRODUCTS':
             return {
                 ...state,
                 products: [...action.products]
             }
+        case 'SN/PRODUCT/TOGGLE_IS_FETCHING':
+            return {...state, isFetching: action.isFetching}
+        case 'SN/PRODUCT/SET_PRODUCTS':
+            return {...state, products: [...action.products]}
+        case 'SN/PRODUCT/SET_CURRENT_PAGE':
+            return {...state, currentPage: action.currentPage}
         default:
             return state
     }
 }
 
 export const actions = {
-    requestProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/LOAD_PRODUCTS', products: products} as const),
+    requestProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/REQUEST_PRODUCTS', products: products} as const),
     toggleIsFetching: (isFetching: boolean) => ({type: 'SN/PRODUCT/TOGGLE_IS_FETCHING', isFetching} as const),
     setProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/SET_PRODUCTS', products} as const),
     setCurrentPage: (currentPage: number) => ({type: 'SN/PRODUCT/SET_CURRENT_PAGE', currentPage} as const),
