@@ -1,9 +1,11 @@
 import {Action, applyMiddleware, combineReducers, compose, createStore} from "redux";
 import thunkMiddleware, {ThunkAction} from "redux-thunk";
 import appReducer from "./app-reducer";
+import productReducer from "./product-reducer";
 
 let rootReducer = combineReducers({
-    app: appReducer
+    app: appReducer,
+    products: productReducer
 })
 
 type RootReducerType = typeof rootReducer
