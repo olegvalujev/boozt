@@ -51,10 +51,11 @@ class ProductListContainer extends React.Component<PropsType> {
         return <>
             <h2>{this.props.pageTitle}</h2>
             <ProductList
-                   pageSize={this.props.pageSize}
-                   currentPage={this.props.currentPage}
-                   onPageChanged={this.onPageChanged}
-                   products={this.props.products}
+                totalProductsCount={this.props.totalProductsCount}
+                pageSize={this.props.pageSize}
+                currentPage={this.props.currentPage}
+                onPageChanged={this.onPageChanged}
+                products={this.props.products}
             />
         </>
     }
