@@ -32,11 +32,6 @@ export const requestProducts = (page: number, pageSize: number): ThunkType => as
     dispatch(actions.toggleIsFetching(false))
 
     dispatch(actions.setProducts(products))
-
-    // Promise.all([promise])
-    //     .then(() => {
-    //         dispatch(actions.initializationSuccess())
-    //     })
 }
 
 export default productReducer

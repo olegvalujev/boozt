@@ -20,11 +20,8 @@ export const actions = {
 }
 
 export const initializeApp = (): ThunkType => async (dispatch) =>  {
+    //TODO: Add later some initialization setup
     dispatch(actions.initializationSuccess())
-    // Promise.all([promise])
-    //     .then(() => {
-    //         dispatch(actions.initializationSuccess())
-    //     })
 }
 
 export default appReducer

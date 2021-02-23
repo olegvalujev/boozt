@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect'
-import {AppStateType} from "./redux-store";
+import {AppStateType} from './redux-store'
 import {ProductType} from './product-reducer'
 
 export const getProducts = (state: AppStateType): Array<ProductType> => {
@@ -11,7 +11,7 @@ export const getFiltered = createSelector(getProducts, (products) => {
 export const getPageSize = (state: AppStateType) => {
     return state.products.pageSize
 }
-export const getTotalUsersCount = (state: AppStateType) => {
+export const getTotalProductsCount = (state: AppStateType) => {
     return state.products.totalProductsCount
 }
 export const getCurrentPage = (state: AppStateType) => {
