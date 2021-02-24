@@ -3,8 +3,10 @@ import styled from "styled-components";
 import {SortingType} from "../../../redux/product-reducer";
 
 
-const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageChanged, currentPage, portionSize = 10, ...props}) => {
-    let [paginationPage, setPaginationPage] = useState(1)
+const Paginator: React.FC<PropsType> = React.memo((props) => {
+    const {totalProductsCount, pageSize, onPageChanged, currentPage, portionSize = 10} = props
+    const currentPaginationPage = Math.ceil(currentPage/pageSize)
+    let [paginationPage, setPaginationPage] = useState(currentPaginationPage || 1)
 
     let pagesCount = Math.ceil(totalProductsCount / pageSize)
     let pages: Array<number> = []
@@ -49,7 +51,7 @@ const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageCha
             <Button onClick={()=>(toggleSortingOrder())}>Sort order: {props.sortOrder}</Button>
         </PaginatorWrapper>
     )
-}
+})
 
 export default Paginator
 

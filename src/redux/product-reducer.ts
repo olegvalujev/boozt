@@ -21,7 +21,6 @@ const productReducer = (state = initialState, action: ActionsType): InitialState
         case 'SN/PRODUCT/TOGGLE_IS_FETCHING':
             return {...state, isFetching: action.isFetching}
         case 'SN/PRODUCT/SET_PRODUCTS':
-            console.log(action.products)
             return {...state, products: [...action.products]}
         case 'SN/PRODUCT/SET_CURRENT_PAGE':
             return {...state, currentPage: action.currentPage}
