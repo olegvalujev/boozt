@@ -16,6 +16,7 @@ import {
     getProducts,
     getTotalProductsCount
 } from "../../redux/product-selectors";
+import styled from "styled-components";
 
 type MapStatePropsType = {
     currentPage: number
@@ -49,7 +50,7 @@ class ProductListContainer extends React.Component<PropsType> {
         if (this.props.isFetching) return <Preloader/>
 
         return <>
-            <h2>{this.props.pageTitle}</h2>
+            <PageTitle>{this.props.pageTitle}</PageTitle>
             <ProductList
                 totalProductsCount={this.props.totalProductsCount}
                 pageSize={this.props.pageSize}
@@ -75,9 +76,13 @@ let mapStateToProps = (state: AppStateType): MapStatePropsType => {
 export default compose(
     // <TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState> as a reference for me
     connect<MapStatePropsType, MapDispatchPropsType, OwnPropsType, AppStateType>(
-    mapStateToProps,
-    {
-        setCurrentPage: productActions.setCurrentPage,
-        requestProducts
-    })
+        mapStateToProps,
+        {
+            setCurrentPage: productActions.setCurrentPage,
+            requestProducts
+        })
 )(ProductListContainer)
+
+const PageTitle = styled.h2`
+        text-align: center;
+    `

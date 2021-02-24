@@ -1,5 +1,5 @@
-import styles from "./Paginator.module.css";
 import React, {useState} from "react";
+import styled from "styled-components";
 
 type PropsType = {
     totalProductsCount: number,
@@ -32,27 +32,40 @@ const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageCha
     }
 
     return (
-        <div className={styles.paginatorWrapper}>
+        <PaginatorWrapper>
             {showPrev && <button onClick={() => {
                 onPrevPage()
             }}>Prev</button>}
-            {
-                pages.filter(page => (page >= startPage && page <= endPage)).map(page => {
-                    return <span key={page}
-                                 onClick={() => {
-                                     onPageChanged(page)
-                                 }}
-                                 className={styles.numberBox + ' ' + (currentPage === page ? styles.selectedPage : undefined)}>
-
-                        {page}
-                    </span>
-                })
-            }
-            {showNext && <button onClick={() => {
-                onNextPage()
-            }}>Next</button>}
-        </div>
+            {pages.filter(page => (page >= startPage && page <= endPage)).map(page => {
+                return <NumberBox key={page}
+                                  onClick={() => {onPageChanged(page)}}
+                                  isSelected={(currentPage === page)}>
+                    {page}
+                </NumberBox>
+            })}
+            {showNext && <button onClick={() => {onNextPage()}}>Next</button>}
+        </PaginatorWrapper>
     )
 }
 
 export default Paginator
+
+type NumberBoxType = {
+    isSelected: boolean
+}
+
+const PaginatorWrapper = styled.div`
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #DCEBF1;
+    margin-bottom: 20px;
+`
+
+const NumberBox = styled.span`
+    padding: 0 5px;
+    border: solid 1px gray;
+    font-size: 13px;
+    ${(props: NumberBoxType) => props.isSelected && 
+        "font-weight: bold; background-color: lightgray;"
+    }       
+`

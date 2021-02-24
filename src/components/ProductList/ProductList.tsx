@@ -3,6 +3,7 @@ import Product from './Product/Product'
 import styled from "styled-components";
 import Paginator from "../common/Paginator/Paginator";
 import {ProductType} from "../../redux/product-reducer";
+import {device} from "../../device/device";
 
 const ProductList: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageChanged, currentPage, products, ...props}) => {
     return <ProductListWrapper>
@@ -20,10 +21,22 @@ const ProductList: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageC
 export default ProductList
 
 const ProductListWrapper = styled.div`
-    background-color: green;
+    @media ${device.mobileL} {
+        margin: 5px;
+    }
+    @media ${device.laptop} {
+        margin: 0 20px;
 `
 const List = styled.div`
-    background-color: yellow;
+    @media ${device.mobileL} {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        &:after {
+          content: "";
+          flex: auto;
+        }
+    }
 `
 
 type PropsType = {

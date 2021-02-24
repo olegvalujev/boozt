@@ -1,7 +1,8 @@
-import * as products from '../data/product_list.json'
+import {default as products} from '../data/product_list.json'
+import {ProductType} from "../redux/product-reducer";
 
 export const productAPI = {
-    getProducts() {
+    getProducts(): Array<ProductType> {
         return products
     }
 }

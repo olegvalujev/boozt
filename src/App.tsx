@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import ProductList from './components/ProductList/ProductList'
 import {BrowserRouter, Route, Switch, withRouter} from 'react-router-dom'
 import styled from 'styled-components'
 import {connect, Provider} from 'react-redux'
@@ -7,6 +6,8 @@ import {compose} from 'redux'
 import store, {AppStateType} from './redux/redux-store'
 import {initializeApp} from "./redux/app-reducer";
 import Preloader from "./components/common/Preloader/Preloader";
+import ProductListContainer from "./components/ProductList/ProductListContainer";
+import {device} from "./device/device";
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
@@ -32,7 +33,7 @@ class App extends Component<MapPropsType & DispatchPropsType> {
             <AppWrapper>
                 <div className="app-wrapper-content">
                     <Switch>
-                        <Route exact path="/" render={ProductList}/>
+                        <Route exact path="/" render={() => <ProductListContainer pageTitle={'Product List'}/>}/>
                         <Route path="*">
                             <div>404 NOT FOUND</div>
                         </Route>
@@ -65,5 +66,13 @@ const RootContainer: React.FC = () => {
 export default RootContainer;
 
 const AppWrapper = styled.div`
-    background-color: blue;
+    font-size: 14px;
+    
+    @media ${device.mobileL} {
+       margin: 5px;
+    }
+    @media ${device.laptop} {
+        max-width: 1920px;
+        margin: 0 auto;
+    }
 `
