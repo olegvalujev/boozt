@@ -37,9 +37,9 @@ const Paginator: React.FC<PropsType> = React.memo((props) => {
 
     return (
         <PaginatorWrapper>
-            {showPrev && <button onClick={() => {
+            {showPrev && <Button primary onClick={() => {
                 onPrevPage()
-            }}>Prev</button>}
+            }}>Prev</Button>}
             {pages.filter(page => (page >= startPage && page <= endPage)).map(page => {
                 return <NumberBox key={page}
                                   onClick={() => {onPageChanged(page)}}
@@ -47,7 +47,7 @@ const Paginator: React.FC<PropsType> = React.memo((props) => {
                     {page}
                 </NumberBox>
             })}
-            {showNext && <button onClick={() => {onNextPage()}}>Next</button>}
+            {showNext && <Button primary onClick={() => {onNextPage()}}>Next</Button>}
             <Button onClick={()=>(toggleSortingOrder())}>Sort order: {props.sortOrder}</Button>
         </PaginatorWrapper>
     )
@@ -67,6 +67,10 @@ type PropsType = {
 
 type NumberBoxType = {
     isSelected: boolean
+}
+
+type ButtonType = {
+    primary?: boolean
 }
 
 const PaginatorWrapper = styled.div`
@@ -93,5 +97,17 @@ const NumberBox = styled.span`
 `
 
 const Button = styled.button`
+  background: ${(props: ButtonType) => !!props.primary ? "palevioletred" : "white"};
+  color: ${(props: ButtonType) => !!props.primary ? "white" : "palevioletred"};
     
+  &:hover {
+     background: ${(props: ButtonType) => !!props.primary ? "#af5a76" : "#faecf1"};
+     color: ${(props: ButtonType) => !!props.primary ? "#faecf1" : "#af5a76"};
+     cursor: pointer;
+  }
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid palevioletred;
+  border-radius: 3px;
 `
