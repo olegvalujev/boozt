@@ -1,5 +1,14 @@
 import {BaseThunkType, InferActionsTypes} from "./redux-store";
 import {productAPI} from "../api/api";
+import {filterProducts} from "../helpers/product-helpers";
+
+const initialState = {
+    products: [] as Array<ProductType>,
+    pageSize: 10,
+    totalProductsCount: 0,
+    currentPage: 1,
+    isFetching: true
+}
 
 const productReducer = (state = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
@@ -11,27 +20,34 @@ const productReducer = (state = initialState, action: ActionsType): InitialState
         case 'SN/PRODUCT/TOGGLE_IS_FETCHING':
             return {...state, isFetching: action.isFetching}
         case 'SN/PRODUCT/SET_PRODUCTS':
+            console.log(action.products)
             return {...state, products: [...action.products]}
         case 'SN/PRODUCT/SET_CURRENT_PAGE':
             return {...state, currentPage: action.currentPage}
+        case 'SN/PRODUCT/SET_PRODUCTS_TOTAL_COUNT':
+            return {...state, totalProductsCount: action.totalProductsCount}
         default:
             return state
     }
 }
 
 export const actions = {
-    requestProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/REQUEST_PRODUCTS', products: products} as const),
+    requestProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/REQUEST_PRODUCTS', products} as const),
     toggleIsFetching: (isFetching: boolean) => ({type: 'SN/PRODUCT/TOGGLE_IS_FETCHING', isFetching} as const),
     setProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/SET_PRODUCTS', products} as const),
     setCurrentPage: (currentPage: number) => ({type: 'SN/PRODUCT/SET_CURRENT_PAGE', currentPage} as const),
+    setProductsTotalCount: (totalProductsCount: number) => ({type: 'SN/PRODUCT/SET_PRODUCTS_TOTAL_COUNT', totalProductsCount} as const),
 }
 
 export const requestProducts = (page: number, pageSize: number): ThunkType => async (dispatch) =>  {
     dispatch(actions.toggleIsFetching(true))
     const products = await productAPI.getProducts()
+    const filteredProducts = filterProducts(products, page, pageSize)
+
+    dispatch(actions.setProductsTotalCount(products.length))
     dispatch(actions.toggleIsFetching(false))
 
-    dispatch(actions.setProducts(products))
+    dispatch(actions.setProducts(filteredProducts))
 }
 
 export default productReducer
@@ -43,14 +59,6 @@ export type ProductType = {
     actual_price: string
     base_price: string
     filename: string
-}
-
-const initialState = {
-    products: [] as Array<ProductType>,
-    pageSize: 10,
-    totalProductsCount: 0,
-    currentPage: 1,
-    isFetching: true
 }
 
 type InitialStateType = typeof initialState
