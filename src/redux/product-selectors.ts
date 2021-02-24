@@ -1,13 +1,12 @@
-import {createSelector} from 'reselect'
 import {AppStateType} from './redux-store'
-import {ProductType} from './product-reducer'
+import {ProductType, SortingType} from './product-reducer'
 
 export const getProducts = (state: AppStateType): Array<ProductType> => {
     return state.products.products
 }
-export const getFiltered = createSelector(getProducts, (products) => {
-    return products.filter(product => true)
-})
+export const getSortOrder = (state: AppStateType): SortingType => {
+    return state.products.sort
+}
 export const getPageSize = (state: AppStateType) => {
     return state.products.pageSize
 }

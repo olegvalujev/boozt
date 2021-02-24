@@ -2,27 +2,13 @@ import React from 'react'
 import {ProductType} from "../../../redux/product-reducer";
 import styled from "styled-components";
 import {device} from "../../../device/device";
-
-const ProductCard = styled.div`
-    
-    @media ${device.mobileM} {
-        flex: 0 1 calc(50% - 1em);
-    }
-    @media ${device.laptop} {
-        flex: 0 1 calc(25% - 1em);
-    }
-`
-
-const ProductImage = styled.img`
-    max-width: 100%;
-    height: auto;
-`
+import defaultImage from '../../../assets/no-image-available.png'
 
 const Product: React.FC<PropsType> = ({product}) => {
     return (
         <ProductCard>
             <div>
-                <ProductImage src={product.filename} alt={''}/>
+                <ProductImage src={product.filename ? product.filename : defaultImage} alt={'Error loading image'}/>
             </div>
 
             <div>
@@ -40,3 +26,18 @@ export default Product
 type PropsType = {
     product: ProductType
 }
+
+const ProductCard = styled.div`
+    
+    @media ${device.mobileM} {
+        flex: 0 1 calc(50% - 1em);
+    }
+    @media ${device.laptop} {
+        flex: 0 1 calc(25% - 1em);
+    }
+`
+
+const ProductImage = styled.img`
+    max-width: 100%;
+    height: auto;
+`

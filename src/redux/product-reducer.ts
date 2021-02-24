@@ -7,7 +7,8 @@ const initialState = {
     pageSize: 10,
     totalProductsCount: 0,
     currentPage: 1,
-    isFetching: true
+    isFetching: true,
+    sort: 'ASC' as SortingType
 }
 
 const productReducer = (state = initialState, action: ActionsType): InitialStateType => {
@@ -26,6 +27,8 @@ const productReducer = (state = initialState, action: ActionsType): InitialState
             return {...state, currentPage: action.currentPage}
         case 'SN/PRODUCT/SET_PRODUCTS_TOTAL_COUNT':
             return {...state, totalProductsCount: action.totalProductsCount}
+        case "SN/PRODUCT/SET_PRODUCTS_SORT_ORDER":
+            return {...state, sort: action.sortOrder}
         default:
             return state
     }
@@ -37,11 +40,12 @@ export const actions = {
     setProducts: (products: Array<ProductType>) => ({type: 'SN/PRODUCT/SET_PRODUCTS', products} as const),
     setCurrentPage: (currentPage: number) => ({type: 'SN/PRODUCT/SET_CURRENT_PAGE', currentPage} as const),
     setProductsTotalCount: (totalProductsCount: number) => ({type: 'SN/PRODUCT/SET_PRODUCTS_TOTAL_COUNT', totalProductsCount} as const),
+    setSortOrder: (sortOrder: SortingType) => ({type: 'SN/PRODUCT/SET_PRODUCTS_SORT_ORDER', sortOrder} as const),
 }
 
-export const requestProducts = (page: number, pageSize: number): ThunkType => async (dispatch) =>  {
+export const requestProducts = (page: number, pageSize: number, sort: SortingType): ThunkType => async (dispatch) =>  {
     dispatch(actions.toggleIsFetching(true))
-    const products = await productAPI.getProducts()
+    const products = await productAPI.getProducts(sort)
     const filteredProducts = filterProducts(products, page, pageSize)
 
     dispatch(actions.setProductsTotalCount(products.length))
@@ -60,6 +64,8 @@ export type ProductType = {
     base_price: string
     filename: string
 }
+
+export type SortingType = 'ASC' | 'DESC'
 
 type InitialStateType = typeof initialState
 type ActionsType = InferActionsTypes<typeof actions>

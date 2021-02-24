@@ -2,7 +2,7 @@ import React from 'react'
 import Product from './Product/Product'
 import styled from "styled-components";
 import Paginator from "../common/Paginator/Paginator";
-import {ProductType} from "../../redux/product-reducer";
+import {ProductType, SortingType} from "../../redux/product-reducer";
 import {device} from "../../device/device";
 
 const ProductList: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageChanged, currentPage, products, ...props}) => {
@@ -11,7 +11,9 @@ const ProductList: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageC
                    pageSize={pageSize}
                    onPageChanged={onPageChanged}
                    currentPage={currentPage}
-                   portionSize={10}/>
+                   portionSize={10}
+                   sortOrder={props.sortOrder}
+                   onSortOrderChanged={props.onSortOrderChanged}/>
         <List>
             {products.map(p => (<Product key={p.id} product={p}/>))}
         </List>
@@ -45,4 +47,6 @@ type PropsType = {
     onPageChanged: (pageNumber: number) => void
     currentPage: number
     products: Array<ProductType>
+    onSortOrderChanged: (sort: SortingType) => void
+    sortOrder: SortingType
 }

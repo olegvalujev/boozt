@@ -3,7 +3,7 @@ import {connect} from "react-redux";
 import {
     ProductType,
     requestProducts,
-    actions as productActions
+    actions as productActions, SortingType
 } from "../../redux/product-reducer";
 import ProductList from "./ProductList";
 import Preloader from "../common/Preloader/Preloader";
@@ -13,37 +13,28 @@ import {
     getCurrentPage,
     getIsFetching,
     getPageSize,
-    getProducts,
+    getProducts, getSortOrder,
     getTotalProductsCount
 } from "../../redux/product-selectors";
 import styled from "styled-components";
 
-type MapStatePropsType = {
-    currentPage: number
-    pageSize: number
-    isFetching: boolean
-    totalProductsCount: number
-    products: Array<ProductType>
-}
-type MapDispatchPropsType = {
-    requestProducts: (currentPage: number, pageSize: number) => void
-    setCurrentPage: (pageNumber: number) => void
-}
-type OwnPropsType = {
-    pageTitle: string
-}
-type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
 
 class ProductListContainer extends React.Component<PropsType> {
     componentDidMount() {
-        const {currentPage, pageSize} = this.props
-        this.props.requestProducts(currentPage, pageSize)
+        const {currentPage, pageSize, sort} = this.props
+        this.props.requestProducts(currentPage, pageSize, sort)
     }
 
     onPageChanged = (pageNumber: number) => {
-        const {pageSize} = this.props
+        const {pageSize, sort} = this.props
         this.props.setCurrentPage(pageNumber)
-        this.props.requestProducts(pageNumber, pageSize)
+        this.props.requestProducts(pageNumber, pageSize, sort)
+    }
+
+    onSortOrderChanged = (sort: SortingType) => {
+        const {currentPage, pageSize} = this.props
+        this.props.setSortingOrder(sort)
+        this.props.requestProducts(currentPage, pageSize, sort)
     }
 
     render() {
@@ -55,8 +46,10 @@ class ProductListContainer extends React.Component<PropsType> {
                 totalProductsCount={this.props.totalProductsCount}
                 pageSize={this.props.pageSize}
                 currentPage={this.props.currentPage}
-                onPageChanged={this.onPageChanged}
                 products={this.props.products}
+                sortOrder={this.props.sort}
+                onPageChanged={this.onPageChanged}
+                onSortOrderChanged={this.onSortOrderChanged}
             />
         </>
     }
@@ -68,7 +61,8 @@ let mapStateToProps = (state: AppStateType): MapStatePropsType => {
         pageSize: getPageSize(state),
         currentPage: getCurrentPage(state),
         isFetching: getIsFetching(state),
-        totalProductsCount: getTotalProductsCount(state)
+        totalProductsCount: getTotalProductsCount(state),
+        sort: getSortOrder(state)
     }
 };
 
@@ -79,9 +73,29 @@ export default compose(
         mapStateToProps,
         {
             setCurrentPage: productActions.setCurrentPage,
+            setSortingOrder: productActions.setSortOrder,
             requestProducts
         })
 )(ProductListContainer)
+
+
+type MapStatePropsType = {
+    currentPage: number
+    pageSize: number
+    isFetching: boolean
+    totalProductsCount: number
+    products: Array<ProductType>
+    sort: SortingType
+}
+type MapDispatchPropsType = {
+    requestProducts: (currentPage: number, pageSize: number, sort: SortingType) => void
+    setCurrentPage: (pageNumber: number) => void
+    setSortingOrder: (sort: SortingType) => void
+}
+type OwnPropsType = {
+    pageTitle: string
+}
+type PropsType = MapStatePropsType & MapDispatchPropsType & OwnPropsType
 
 const PageTitle = styled.h2`
         text-align: center;

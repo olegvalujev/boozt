@@ -1,15 +1,9 @@
 import React, {useState} from "react";
 import styled from "styled-components";
+import {SortingType} from "../../../redux/product-reducer";
 
-type PropsType = {
-    totalProductsCount: number,
-    pageSize: number,
-    currentPage: number,
-    onPageChanged: (page: number) => void,
-    portionSize?: number
-}
 
-const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageChanged, currentPage, portionSize = 10}) => {
+const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageChanged, currentPage, portionSize = 10, ...props}) => {
     let [paginationPage, setPaginationPage] = useState(1)
 
     let pagesCount = Math.ceil(totalProductsCount / pageSize)
@@ -21,7 +15,7 @@ const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageCha
     let startPage = (portionSize * paginationPage) - portionSize + 1
     let endPage = startPage + portionSize - 1
     let showPrev = startPage > portionSize;
-    let showNext = pagesCount > endPage;
+    let showNext = pagesCount > paginationPage;
 
     const onPrevPage = () => {
         setPaginationPage(paginationPage - 1)
@@ -29,6 +23,14 @@ const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageCha
 
     const onNextPage = () => {
         setPaginationPage(paginationPage + 1)
+    }
+
+    const toggleSortingOrder = () => {
+        if (props.sortOrder === 'ASC'){
+            props.onSortOrderChanged('DESC')
+        }else{
+            props.onSortOrderChanged('ASC')
+        }
     }
 
     return (
@@ -44,11 +46,22 @@ const Paginator: React.FC<PropsType> = ({totalProductsCount, pageSize, onPageCha
                 </NumberBox>
             })}
             {showNext && <button onClick={() => {onNextPage()}}>Next</button>}
+            <Button onClick={()=>(toggleSortingOrder())}>Sort order: {props.sortOrder}</Button>
         </PaginatorWrapper>
     )
 }
 
 export default Paginator
+
+type PropsType = {
+    totalProductsCount: number,
+    pageSize: number,
+    currentPage: number,
+    onPageChanged: (page: number) => void,
+    portionSize?: number
+    onSortOrderChanged: (sort: SortingType) => void
+    sortOrder: SortingType
+}
 
 type NumberBoxType = {
     isSelected: boolean
@@ -59,13 +72,24 @@ const PaginatorWrapper = styled.div`
     padding: 5px;
     background-color: #DCEBF1;
     margin-bottom: 20px;
+    text-align: center;
 `
 
 const NumberBox = styled.span`
     padding: 0 5px;
-    border: solid 1px gray;
     font-size: 13px;
+    &:hover {
+        cursor: pointer;
+        background-color: lightgray;
+        border-radius: 5px;
+    }
     ${(props: NumberBoxType) => props.isSelected && 
-        "font-weight: bold; background-color: lightgray;"
+        "font-weight: bold; " +
+        "background-color: lightgray;" +
+        "border-radius: 5px;"
     }       
+`
+
+const Button = styled.button`
+    
 `
